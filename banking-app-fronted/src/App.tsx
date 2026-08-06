@@ -1,10 +1,16 @@
 import './App.css'
+import { Routes, Route } from 'react-router-dom'
+import LogInPage from './pages/LogInPage'
+import NotFoundPage from './pages/NotFoundPage'
 
 function App() {
 
   return (
     <>
-      <h1 style={{ textAlign: 'center' }}>Banking App Başlıyor..</h1>
+      <Routes>
+        <Route path="/" element={<LogInPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
     </>
   )
 }
