@@ -12,11 +12,11 @@ function LogInForm() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
 
-  const handleRegister = () => {
+  const handleRouteRegister = () => {
     navigate("/register");
   };
 
-  const handleForgotPassword = () => {
+  const handleRouteForgotPassword = () => {
     navigate("/forgot-password");
   };
 
@@ -92,7 +92,7 @@ function LogInForm() {
           Beni Hatırla
         </label>
         <a
-          onClick={handleForgotPassword}
+          onClick={handleRouteForgotPassword}
           className="text-blue-500 text-sm hover:text-blue-600 hover:cursor-pointer"
         >
           Şifremi Unuttum
@@ -120,7 +120,7 @@ function LogInForm() {
       <div className="text-center text-sm text-slate-600">
         Hesabınız yok mu?{" "}
         <a
-          onClick={handleRegister}
+          onClick={handleRouteRegister}
           className="text-blue-500 text-sm hover:text-blue-600 hover:cursor-pointer"
         >
           Kayıt olun
