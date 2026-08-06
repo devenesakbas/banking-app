@@ -1,0 +1,133 @@
+import logo from "../assets/logo.png";
+import { useState } from "react";
+import { IoEye, IoEyeOff, IoLockClosed, IoMail } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
+
+function LogInForm() {
+  const navigate = useNavigate();
+
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [rememberMe, setRememberMe] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
+
+  const handleRegister = () => {
+    navigate("/register");
+  };
+
+  const handleForgotPassword = () => {
+    navigate("/forgot-password");
+  };
+
+  const handleLogin = () => {
+    setIsLoading(true);
+    
+    setTimeout(() => {
+      setIsLoading(false);
+      setEmail("");
+      setPassword("");
+      setRememberMe(false);
+    }, 2000);
+  };
+
+  return (
+    <div className="flex flex-col gap-4 w-xl p-6">
+      <div className="flex justify-end">
+        <img src={logo} alt="Logo" className="h-24" />
+      </div>
+
+      <div>
+        <h1 className="text-xl text-slate-600">Lütfen Giriş Yapın</h1>
+      </div>
+
+      <div>
+        <div className="text-sm text-slate-600 font-bold mb-1">E-Posta</div>
+        <div className="relative flex items-center rounded-xl">
+          <span className="absolute left-3 text-slate-400">
+            <IoMail size={20} />
+          </span>
+
+          <input
+            type="text"
+            placeholder="E-Posta"
+            className="w-full pl-10 pr-4 p-2 border border-slate-200 rounded-xl outline-none focus:border-blue-400"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+      </div>
+
+      <div>
+        <div className="text-sm text-slate-600 font-bold mb-1">Şifre</div>
+        <div className="relative flex items-center rounded-xl">
+          <span className="absolute left-3 text-slate-400">
+            <IoLockClosed size={20} />
+          </span>
+
+          <input
+            type={passwordVisible ? "text" : "password"}
+            placeholder="Şifre"
+            className="w-full pl-10 pr-10 p-2 border border-slate-200 rounded-xl outline-none focus:border-blue-400"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+
+          <span
+            onClick={() => setPasswordVisible(!passwordVisible)}
+            className="absolute right-3 text-slate-400 cursor-pointer hover:text-slate-600"
+          >
+            {passwordVisible ? <IoEyeOff size={20} /> : <IoEye size={20} />}
+          </span>
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between gap-2">
+        <label className="flex items-center gap-2 text-sm hover:cursor-pointer">
+          <input
+            type="checkbox"
+            checked={rememberMe}
+            onChange={(e) => setRememberMe(e.target.checked)}
+          />
+          Beni Hatırla
+        </label>
+        <a
+          onClick={handleForgotPassword}
+          className="text-blue-500 text-sm hover:text-blue-600 hover:cursor-pointer"
+        >
+          Şifremi Unuttum
+        </a>
+      </div>
+
+      <div>
+        <button
+          className="w-full p-2 bg-blue-400 hover:bg-blue-500 hover:cursor-pointer rounded-xl text-white duration-300"
+          disabled={isLoading}
+          onClick={handleLogin}
+        >
+          {isLoading ? "Giriş yapılıyor..." : "Giriş Yap"}
+        </button>
+      </div>
+
+      <div className="flex items-center gap-4 my-8">
+        <hr className="w-full border-slate-100 dark:border-neutral-700" />
+        <p className="text-sm text-slate-700 text-center dark:text-slate-300">
+          veya
+        </p>
+        <hr className="w-full border-slate-100 dark:border-neutral-700" />
+      </div>
+
+      <div className="text-center text-sm text-slate-600">
+        Hesabınız yok mu?{" "}
+        <a
+          onClick={handleRegister}
+          className="text-blue-500 text-sm hover:text-blue-600 hover:cursor-pointer"
+        >
+          Kayıt olun
+        </a>
+      </div>
+    </div>
+  );
+}
+
+export default LogInForm;
