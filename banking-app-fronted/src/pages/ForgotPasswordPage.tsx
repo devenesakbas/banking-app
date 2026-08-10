@@ -1,9 +1,12 @@
+import ForgotPasswordForm from "../components/ForgotPasswordForm";
 
 function ForgotPasswordPage() {
   return (
-    <div>
-      <h1>Forgot Password</h1>
+
+    <div className="flex items-center justify-center min-h-screen px-4 p-8 bg-slate-50">
+      <ForgotPasswordForm />
     </div>
+
   );
 }
 

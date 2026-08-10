@@ -101,7 +101,7 @@ function LogInForm() {
 
       <div>
         <button
-          className="w-full cursor-pointer py-3 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold rounded-2xl shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]"
+          className="w-full cursor-pointer py-3 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold rounded-2xl shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300 transform"
           // className="w-full p-2 bg-blue-400 hover:bg-blue-500 hover:cursor-pointer rounded-xl text-white duration-300"
           disabled={isLoading}
           onClick={handleLogin}
@@ -110,12 +110,12 @@ function LogInForm() {
         </button>
       </div>
 
-      <div className="flex items-center gap-4 my-8">
-        <hr className="w-full border-slate-200 dark:border-neutral-700" />
-        <p className="text-sm text-slate-700 text-center dark:text-slate-300">
+      <div className="flex items-center gap-4 my-4">
+        <hr className="w-full border-slate-200 dark:border-neutral-300" />
+        <p className="text-sm text-slate-800 text-center dark:text-slate-500">
           veya
         </p>
-        <hr className="w-full border-slate-200 dark:border-neutral-700" />
+        <hr className="w-full border-slate-200 dark:border-neutral-300" />
       </div>
 
       <div className="text-center text-sm text-slate-600">
