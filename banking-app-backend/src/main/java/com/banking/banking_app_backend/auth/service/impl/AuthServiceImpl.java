@@ -1,11 +1,16 @@
 package com.banking.banking_app_backend.auth.service.impl;
 
 import com.banking.banking_app_backend.auth.dto.request.LoginRequest;
+import com.banking.banking_app_backend.auth.dto.request.MeRequest;
+import com.banking.banking_app_backend.auth.dto.request.RefreshRequest;
 import com.banking.banking_app_backend.auth.dto.request.RegisterRequest;
 import com.banking.banking_app_backend.auth.dto.response.LoginResponse;
+import com.banking.banking_app_backend.auth.dto.response.MeResponse;
+import com.banking.banking_app_backend.auth.dto.response.RefreshResponse;
 import com.banking.banking_app_backend.auth.dto.response.RegisterResponse;
 import com.banking.banking_app_backend.auth.exception.EmailAlreadyExistsException;
 import com.banking.banking_app_backend.auth.exception.InvalidCredentialsException;
+import com.banking.banking_app_backend.auth.exception.InvalidTokenException;
 import com.banking.banking_app_backend.auth.mapper.AuthMapper;
 import com.banking.banking_app_backend.auth.security.JwtService;
 import com.banking.banking_app_backend.auth.service.AuthService;
@@ -70,5 +75,33 @@ public class AuthServiceImpl implements AuthService {
                 .expiresIn(expiresIn)
                 .build();
 
+    }
+
+    @Override
+    public RefreshResponse refresh(RefreshRequest request){
+
+        String email = jwtService.extractUsername(request.refreshToken());
+
+        User user = userRepository
+                .findByEmail(email)
+                .orElseThrow(() -> new InvalidCredentialsException("Email or password is incorrect."));
+
+        if(!jwtService.isTokenValid(request.refreshToken(), user)){
+            throw new InvalidTokenException("Invalid token.");
+        }
+
+        String accessToken = jwtService.generateAccessToken(user);
+
+        return RefreshResponse.builder()
+                .accessToken(accessToken)
+                .refreshToken(request.refreshToken())
+                .expiresIn(jwtService.getRefreshTokenExpiration())
+                .build();
+
+    }
+
+    @Override
+    public MeResponse me(User user) {
+        return authMapper.userToMeResponse(user);
     }
 }

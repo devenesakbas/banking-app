@@ -15,4 +15,6 @@ public interface JwtService {
 
     Long getAccessTokenExpiration();
 
+    Long getRefreshTokenExpiration();
+
 }

@@ -93,6 +93,11 @@ public class JwtServiceImpl implements JwtService {
         return accessTokenExpiration;
     }
 
+    @Override
+    public Long getRefreshTokenExpiration() {
+        return refreshTokenExpiration;
+    }
+
     private boolean isTokenExpired(String token) {
         return extractAllClaims(token).getExpiration().before(new Date());
     }
