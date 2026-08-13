@@ -2,10 +2,14 @@ import { useState } from "react";
 import logo from "../assets/logo.png";
 import { MdOutlineErrorOutline, MdOutlineCheckCircle } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import type { RegisterRequest, RegisterResponse } from "../types/auth";
+import { authService } from "../services/authServices/authService";
+import type { ApiResponse } from "../types/ApiResponse";
+import { getLocalizedErrorMessage } from "../utils/errorHandler";
 
 function RegisterForm() {
-  const [firstName, setFirstName] = useState<string>("");
-  const [lastName, setLastName] = useState<string>("");
+  const [name, setname] = useState<string>("");
+  const [surname, setsurname] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
@@ -17,10 +21,10 @@ function RegisterForm() {
 
   const navigate = useNavigate();
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     setMessage(null);
 
-    if (!firstName || !lastName || !email || !password || !confirmPassword) {
+    if (!name || !surname || !email || !password || !confirmPassword) {
       setMessage({ text: "Lütfen tüm alanları doldurunuz.", type: "error" });
       return;
     }
@@ -31,18 +35,54 @@ function RegisterForm() {
 
     setIsLoading(true);
 
-    setTimeout(() => {
-      setIsLoading(false);
-      setFirstName("");
-      setLastName("");
-      setEmail("");
-      setPassword("");
-      setConfirmPassword("");
+    const form: RegisterRequest = {
+      name,
+      surname,
+      email,
+      password,
+    };
 
-      setMessage({ text: "Kayıt işlemi başarılı.", type: "success" });
+    try {
+      await authService
+        .register(form)
+        .then((response) => {
+          console.log("Sonuç aşagıda:");
+          console.log(response);
+          if (response.data?.success) {
+            setname("");
+            setsurname("");
+            setEmail("");
+            setPassword("");
+            setConfirmPassword("");
 
-      navigate("/");
-    }, 2000);
+            setMessage({
+              text: "Kayıt işlemi başarılı. Giriş yapabilmeniz için sizi giriş sayfasına yönlendiriyoruz...",
+              type: "success",
+            });
+
+            setTimeout(() => {
+              navigate("/login");
+            }, 2000);
+          } else {
+            const errorMessage = getLocalizedErrorMessage(
+              response?.data,
+            );
+            setMessage({ text: errorMessage, type: "error" });
+          }
+        })
+        .catch((error) => {
+          const errorResponse = error.response?.data;
+          const localizedMessage = getLocalizedErrorMessage(errorResponse);
+          setMessage({ text: localizedMessage, type: "error" });
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    } catch (error) {
+      setMessage({ text: "Kayıt işlemi başarısız.", type: "error" });
+    }
+
+    setIsLoading(false);
   };
 
   const handleRouteLogin = () => {
@@ -60,10 +100,11 @@ function RegisterForm() {
       {message && (
         <div className={`px-3 w-full transition-all duration-300`}>
           <div
-            className={`p-3 rounded-xl text-sm font-medium border flex items-center gap-2 ${message.type === "success"
+            className={`p-3 rounded-xl text-sm font-medium border flex items-center gap-2 ${
+              message.type === "success"
                 ? "bg-emerald-50 border-emerald-200 text-emerald-700"
                 : "bg-rose-50 border-rose-200 text-rose-700"
-              }`}
+            }`}
           >
             {message.type === "success" ? (
               <MdOutlineCheckCircle />
@@ -84,8 +125,8 @@ function RegisterForm() {
                 type="text"
                 placeholder="Ad"
                 className="w-full pl-4 pr-4 p-2 border border-slate-200 rounded-xl outline-none focus:border-blue-400"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
+                value={name}
+                onChange={(e) => setname(e.target.value)}
               />
             </div>
           </div>
@@ -96,8 +137,8 @@ function RegisterForm() {
                 type="text"
                 placeholder="Soyad"
                 className="w-full pl-4 pr-4 p-2 border border-slate-200 rounded-xl outline-none focus:border-blue-400"
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
+                value={surname}
+                onChange={(e) => setsurname(e.target.value)}
               />
             </div>
           </div>

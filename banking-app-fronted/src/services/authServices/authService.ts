@@ -1,27 +1,48 @@
-import axios from "axios";
-
-const BASE_URL = "http://localhost:8080";
-
-const BASE_TIMEOUT = 10000; // 10 seconds
-
-const apiClient = axios.create({
-    baseURL: BASE_URL,
-    timeout: BASE_TIMEOUT,
-    headers: {
-        "Content-Type": "application/json",
-    },
-});
+import api from "../api";
+import type {
+  LoginRequest,
+  LoginResponse,
+  RegisterRequest,
+  RegisterResponse,
+  RefreshTokenRequest,
+  RefreshTokenResponse,
+  MeResponse,
+} from "../../types/auth";
+import type { ApiResponse } from "../../types/ApiResponse";
 
 export const authService = {
-    login: (username: string, password: string) => {
-        return apiClient.post("auth/login", { username, password });
-    },
-    
-    register: (username: string, password: string) => {
-        return apiClient.post("auth/register", { username, password });
-    },
-    
-    getProfile: () => {
-        return apiClient.get("auth/profile");
-    },
+  register: async (data: RegisterRequest): Promise<ApiResponse<RegisterResponse>> => {
+    const response: ApiResponse<RegisterResponse> = await api.post(
+      "/auth/register",
+      data
+    );
+
+    return response;
+  },
+
+  login: async (data: LoginRequest): Promise<ApiResponse<LoginResponse>> => {
+    const response: ApiResponse<LoginResponse> = await api.post(
+      "/auth/login",
+      data
+    );
+
+    return response;
+  },
+
+  refresh: async (data: RefreshTokenRequest): Promise<ApiResponse<RefreshTokenResponse>> => {
+    const response: ApiResponse<RefreshTokenResponse> = await api.post(
+      "/auth/refresh",
+      data
+    );
+
+    return response;
+  },
+
+  me: async (): Promise<ApiResponse<MeResponse>> => {
+    const response: ApiResponse<MeResponse> = await api.get(
+      "/auth/me"
+    );
+
+    return response;
+  },
 };
