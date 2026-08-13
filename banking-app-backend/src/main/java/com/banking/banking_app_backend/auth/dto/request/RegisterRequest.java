@@ -6,17 +6,17 @@ import jakarta.validation.constraints.NotBlank;
 
 public record RegisterRequest(
 
-        @NotBlank(message = "Name cannot be empty")
+        @NotBlank(message = "{validaiton.notblank}")
         String name,
 
-        @NotBlank(message = "Surname cannot be empty")
+        @NotBlank(message = "{validation.notblank}")
         String surname,
 
-        @Email
-        @NotBlank(message = "Email cannot be empty")
+        @Email(message = "{validation.email.wellformed}")
+        @NotBlank(message = "{validaiton.notBlank}")
         String email,
 
-        @NotBlank(message = "Password cannot be empty")
+        @NotBlank(message = "{validation.notblank}")
         String password
 ) {
 }

@@ -6,7 +6,7 @@ import lombok.Builder;
 @Builder
 public record RefreshRequest(
 
-        @NotBlank(message = "Refresh token cannot be empty")
+        @NotBlank(message = "{validation.notblank}")
         String refreshToken
 
 ) {
