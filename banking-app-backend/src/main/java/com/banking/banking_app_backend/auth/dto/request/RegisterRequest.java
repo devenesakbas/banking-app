@@ -1,22 +1,23 @@
 package com.banking.banking_app_backend.auth.dto.request;
 
 
+import com.banking.banking_app_backend.common.exception.ValidationMessages;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 public record RegisterRequest(
 
-        @NotBlank(message = "{validaiton.notblank}")
+        @NotBlank(message = ValidationMessages.NOT_BLANK)
         String name,
 
-        @NotBlank(message = "{validation.notblank}")
+        @NotBlank(message = ValidationMessages.NOT_BLANK)
         String surname,
 
-        @Email(message = "{validation.email.wellformed}")
-        @NotBlank(message = "{validaiton.notBlank}")
+        @NotBlank(message = ValidationMessages.NOT_BLANK)
+        @Email(message = ValidationMessages.EMAIL_WELLFORMED)
         String email,
 
-        @NotBlank(message = "{validation.notblank}")
+        @NotBlank(message = ValidationMessages.NOT_BLANK)
         String password
 ) {
 }
