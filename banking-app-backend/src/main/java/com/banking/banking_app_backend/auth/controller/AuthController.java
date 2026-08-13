@@ -1,7 +1,6 @@
 package com.banking.banking_app_backend.auth.controller;
 
 import com.banking.banking_app_backend.auth.dto.request.LoginRequest;
-import com.banking.banking_app_backend.auth.dto.request.MeRequest;
 import com.banking.banking_app_backend.auth.dto.request.RefreshRequest;
 import com.banking.banking_app_backend.auth.dto.request.RegisterRequest;
 import com.banking.banking_app_backend.auth.dto.response.LoginResponse;
@@ -10,11 +9,9 @@ import com.banking.banking_app_backend.auth.dto.response.RefreshResponse;
 import com.banking.banking_app_backend.auth.dto.response.RegisterResponse;
 import com.banking.banking_app_backend.auth.service.AuthService;
 import com.banking.banking_app_backend.common.response.ApiResponse;
-import com.banking.banking_app_backend.user.dto.response.UserResponse;
 import com.banking.banking_app_backend.user.entity.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

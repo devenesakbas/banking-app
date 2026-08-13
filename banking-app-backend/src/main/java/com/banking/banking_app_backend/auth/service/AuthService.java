@@ -1,7 +1,6 @@
 package com.banking.banking_app_backend.auth.service;
 
 import com.banking.banking_app_backend.auth.dto.request.LoginRequest;
-import com.banking.banking_app_backend.auth.dto.request.MeRequest;
 import com.banking.banking_app_backend.auth.dto.request.RefreshRequest;
 import com.banking.banking_app_backend.auth.dto.request.RegisterRequest;
 import com.banking.banking_app_backend.auth.dto.response.LoginResponse;
