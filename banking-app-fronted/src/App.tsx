@@ -4,6 +4,7 @@ import LogInPage from './pages/LogInPage'
 import NotFoundPage from './pages/NotFoundPage'
 import RegisterPage from './pages/RegisterPage'
 import ForgotPasswordPage from './pages/ForgotPasswordPage'
+import DashboardPage from './pages/DashboardPage'
 
 function App() {
 
@@ -14,6 +15,7 @@ function App() {
         <Route path="/login" element={<LogInPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </>

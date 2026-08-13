@@ -6,6 +6,7 @@ import type { LoginRequest, LoginResponse } from "../types/auth";
 import type { ApiResponse } from "../types/ApiResponse";
 import { authService } from "../services/authServices/authService";
 import { MdOutlineCheckCircle, MdOutlineErrorOutline } from "react-icons/md";
+import { getLocalizedErrorMessage } from "../utils/errorHandler";
 
 function LogInForm() {
   const navigate = useNavigate();
@@ -15,7 +16,9 @@ function LogInForm() {
   const [rememberMe, setRememberMe] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
-  const [message, setMessage] = useState<{ type: string; text: string } | null>(null);
+  const [message, setMessage] = useState<{ type: string; text: string } | null>(
+    null,
+  );
 
   const handleRouteRegister = () => {
     navigate("/register");
@@ -26,6 +29,12 @@ function LogInForm() {
   };
 
   const handleLogin = async () => {
+    
+    if(!email || !password) {
+      setMessage({ type: "error", text: "Lütfen tüm alanları doldurunuz." });
+      return;
+    }
+    
     setIsLoading(true);
 
     const data: LoginRequest = {
@@ -34,23 +43,38 @@ function LogInForm() {
     };
 
     try {
-      const result: ApiResponse<LoginResponse> = await authService.login(data);
 
-      if (result.success) {
-        setIsLoading(false);
-        setEmail("");
-        setPassword("");
-        setRememberMe(false);
-        setMessage({ type: "success", text: "Giriş başarılı!" });
+      await authService
+        .login(data)
+        .then((response) => {
+          if (response.data.success) {
+            setIsLoading(false);
+            setEmail("");
+            setPassword("");
+            setRememberMe(false);
+            setMessage({ type: "success", text: "Giriş başarılı!" });
 
-        navigate("/dashboard");
-      }
-      else{
-        setMessage({ type: "error", text: "Giriş başarısız! Lütfen bilgilerinizi kontrol edin." });
-      }
-
+            navigate("/dashboard");
+          } else {
+            const errorMessage = getLocalizedErrorMessage(
+              response.data?.errorCode,
+            );
+            setMessage({ type: "error", text: errorMessage });
+          }
+        })
+        .catch((error) => {
+          const errorResponse = error.response?.data;
+          const localizedMessage = getLocalizedErrorMessage(errorResponse);
+          setMessage({ text: localizedMessage, type: "error" });
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
     } catch (error) {
-      setMessage({ type: "error", text: "İşlem gerçekleştirilirken sorun ile karşılaşıldı. Lütfen daha sonra tekrar deneyiniz." });
+      setMessage({
+        type: "error",
+        text: "İşlem gerçekleştirilirken sorun ile karşılaşıldı. Lütfen daha sonra tekrar deneyiniz.",
+      });
     }
   };
 
@@ -65,18 +89,18 @@ function LogInForm() {
       </div>
 
       {message && (
-        <div className={`px-3 w-full transition-all duration-300`}>
+        <div className={`w-full transition-all duration-300`}>
           <div
-            className={`p-3 rounded-xl text-sm font-medium border flex items-center gap-2 ${
+            className={`p-3 rounded-xl text-xs font-medium border flex items-center gap-2 ${
               message.type === "success"
                 ? "bg-emerald-50 border-emerald-200 text-emerald-700"
                 : "bg-rose-50 border-rose-200 text-rose-700"
             }`}
           >
             {message.type === "success" ? (
-              <MdOutlineCheckCircle />
+              <MdOutlineCheckCircle className="text-xl" />
             ) : (
-              <MdOutlineErrorOutline />
+              <MdOutlineErrorOutline className="text-xl" />
             )}
             {message.text}
           </div>
