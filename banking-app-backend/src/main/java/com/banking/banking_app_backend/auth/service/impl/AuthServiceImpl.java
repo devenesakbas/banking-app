@@ -95,7 +95,6 @@ public class AuthServiceImpl implements AuthService {
         return RefreshResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(request.refreshToken())
-                .expiresIn(jwtService.getRefreshTokenExpiration())
                 .build();
 
     }

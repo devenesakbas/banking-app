@@ -6,8 +6,7 @@ import lombok.Builder;
 public record RefreshResponse(
 
         String accessToken,
-        String refreshToken,
-        Long expiresIn
+        String refreshToken
 
 ) {
 }
