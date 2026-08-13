@@ -1,12 +1,10 @@
 package com.banking.banking_app_backend.auth.controller;
 
+import com.banking.banking_app_backend.auth.dto.request.ForgotPasswordRequest;
 import com.banking.banking_app_backend.auth.dto.request.LoginRequest;
 import com.banking.banking_app_backend.auth.dto.request.RefreshRequest;
 import com.banking.banking_app_backend.auth.dto.request.RegisterRequest;
-import com.banking.banking_app_backend.auth.dto.response.LoginResponse;
-import com.banking.banking_app_backend.auth.dto.response.MeResponse;
-import com.banking.banking_app_backend.auth.dto.response.RefreshResponse;
-import com.banking.banking_app_backend.auth.dto.response.RegisterResponse;
+import com.banking.banking_app_backend.auth.dto.response.*;
 import com.banking.banking_app_backend.auth.service.AuthService;
 import com.banking.banking_app_backend.common.response.ApiResponse;
 import com.banking.banking_app_backend.user.entity.User;
@@ -55,6 +53,14 @@ public class AuthController {
         MeResponse result = authService.me(user);
         return ResponseEntity.ok(
                 ApiResponse.success(result, "Me successful")
+        );
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<ApiResponse<ForgotPasswordResponse>> forgotpassword(@RequestBody @Valid ForgotPasswordRequest request){
+        ForgotPasswordResponse result = authService.forgotPassword(request);
+        return ResponseEntity.ok(
+                ApiResponse.success(result, "Forgot password successful")
         );
     }
 

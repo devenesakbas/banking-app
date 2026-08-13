@@ -1,25 +1,31 @@
 package com.banking.banking_app_backend.auth.service.impl;
 
+import com.banking.banking_app_backend.auth.dto.request.ForgotPasswordRequest;
 import com.banking.banking_app_backend.auth.dto.request.LoginRequest;
 import com.banking.banking_app_backend.auth.dto.request.RefreshRequest;
 import com.banking.banking_app_backend.auth.dto.request.RegisterRequest;
-import com.banking.banking_app_backend.auth.dto.response.LoginResponse;
-import com.banking.banking_app_backend.auth.dto.response.MeResponse;
-import com.banking.banking_app_backend.auth.dto.response.RefreshResponse;
-import com.banking.banking_app_backend.auth.dto.response.RegisterResponse;
+import com.banking.banking_app_backend.auth.dto.response.*;
+import com.banking.banking_app_backend.auth.entity.PasswordResetCodes;
 import com.banking.banking_app_backend.auth.exception.EmailAlreadyExistsException;
 import com.banking.banking_app_backend.auth.exception.InvalidCredentialsException;
 import com.banking.banking_app_backend.auth.exception.InvalidTokenException;
 import com.banking.banking_app_backend.auth.mapper.AuthMapper;
+import com.banking.banking_app_backend.auth.repository.PasswordResetCodesRepository;
 import com.banking.banking_app_backend.auth.security.JwtService;
 import com.banking.banking_app_backend.auth.service.AuthService;
 import com.banking.banking_app_backend.user.entity.User;
 import com.banking.banking_app_backend.user.entity.UserRole;
+import com.banking.banking_app_backend.user.exception.UserNotFoundException;
 import com.banking.banking_app_backend.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.security.SecureRandom;
+import java.time.LocalDateTime;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +35,10 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final PasswordResetCodesRepository passwordResetCodesRepository;
+
+    @Value("${reset-password.code-expiration}")
+    private final Long ResetCodeExpiration;
 
     @Override
     @Transactional
@@ -101,5 +111,31 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public MeResponse me(User user) {
         return authMapper.userToMeResponse(user);
+    }
+
+    @Override
+    public ForgotPasswordResponse forgotPassword(ForgotPasswordRequest request){
+
+        User user = userRepository.findByEmail(request.email())
+                .orElseThrow(() -> new UserNotFoundException("User not found."));
+
+        String code = generatePasswordResetCode();
+
+        PasswordResetCodes passwordResetCodes = PasswordResetCodes.builder()
+                .user(user)
+                .code(code)
+                .expiresAt(LocalDateTime.now().plusSeconds(ResetCodeExpiration))
+                .isUsed(false)
+                .build();
+
+        PasswordResetCodes resetCode = passwordResetCodesRepository.save(passwordResetCodes);
+        return authMapper.passwordResetCodesToForgotPasswordResponse(resetCode);
+
+    }
+
+    private String generatePasswordResetCode() {
+        SecureRandom random = new SecureRandom();
+        int number = random.nextInt(1000000);
+        return String.format("%06d", number);
     }
 }

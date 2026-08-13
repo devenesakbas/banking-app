@@ -21,3 +21,6 @@ jwt:
   secret: 8ff114363207ca212e263a05dfea403e46498d045cad2b00208130a3e3bc2e79 // SHA 256 - banking-app
   access-token-expiration: 900000
   refresh-token-expiration: 604800000
+
+reset-password:
+  code-expiration: 3600000
