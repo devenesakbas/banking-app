@@ -1,18 +1,17 @@
 package com.banking.banking_app_backend.auth.service.impl;
 
-import com.banking.banking_app_backend.auth.dto.request.ForgotPasswordRequest;
-import com.banking.banking_app_backend.auth.dto.request.LoginRequest;
-import com.banking.banking_app_backend.auth.dto.request.RefreshRequest;
-import com.banking.banking_app_backend.auth.dto.request.RegisterRequest;
+import com.banking.banking_app_backend.auth.dto.request.*;
 import com.banking.banking_app_backend.auth.dto.response.*;
 import com.banking.banking_app_backend.auth.entity.PasswordResetCodes;
-import com.banking.banking_app_backend.auth.exception.EmailAlreadyExistsException;
-import com.banking.banking_app_backend.auth.exception.InvalidCredentialsException;
-import com.banking.banking_app_backend.auth.exception.InvalidTokenException;
+import com.banking.banking_app_backend.auth.exception.*;
 import com.banking.banking_app_backend.auth.mapper.AuthMapper;
 import com.banking.banking_app_backend.auth.repository.PasswordResetCodesRepository;
 import com.banking.banking_app_backend.auth.security.JwtService;
 import com.banking.banking_app_backend.auth.service.AuthService;
+import com.banking.banking_app_backend.common.response.ApiResponse;
+import com.banking.banking_app_backend.notification.dto.reponse.ResetCodeResponse;
+import com.banking.banking_app_backend.notification.dto.request.ResetCodeRequest;
+import com.banking.banking_app_backend.notification.service.EmailService;
 import com.banking.banking_app_backend.user.entity.User;
 import com.banking.banking_app_backend.user.entity.UserRole;
 import com.banking.banking_app_backend.user.exception.UserNotFoundException;
@@ -20,12 +19,12 @@ import com.banking.banking_app_backend.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
-import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -36,9 +35,10 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final PasswordResetCodesRepository passwordResetCodesRepository;
+    private final EmailService emailService;
 
-    @Value("${reset-password.code-expiration}")
-    private final Long ResetCodeExpiration;
+    @Value("${notification.email.reset-code.expiration}")
+    private Long ResetCodeExpiration;
 
     @Override
     @Transactional
@@ -113,6 +113,7 @@ public class AuthServiceImpl implements AuthService {
         return authMapper.userToMeResponse(user);
     }
 
+    @Transactional
     @Override
     public ForgotPasswordResponse forgotPassword(ForgotPasswordRequest request){
 
@@ -129,7 +130,27 @@ public class AuthServiceImpl implements AuthService {
                 .build();
 
         PasswordResetCodes resetCode = passwordResetCodesRepository.save(passwordResetCodes);
-        return authMapper.passwordResetCodesToForgotPasswordResponse(resetCode);
+
+        ResetCodeRequest requestSendEmail = ResetCodeRequest.builder()
+                .to(user.getEmail())
+                .code(code)
+                .build();
+
+        try {
+            ResetCodeResponse resetCodeResponse = emailService.sendResetCodeEmail(requestSendEmail);
+
+            if(!resetCodeResponse.send()){
+                throw new EmailSendException("Failed to send reset code.");
+            }
+        } catch (Exception e) {
+            throw new EmailSendException(e.getMessage());
+        }
+
+
+
+        return ForgotPasswordResponse.builder()
+                .send(true)
+                .build();
 
     }
 
@@ -137,5 +158,25 @@ public class AuthServiceImpl implements AuthService {
         SecureRandom random = new SecureRandom();
         int number = random.nextInt(1000000);
         return String.format("%06d", number);
+    }
+
+    @Override
+    public VerifyResetCodeResponse verifyResetCode(VerifyResetCodeRequest request){
+
+        User user = userRepository.findByEmail(request.email())
+                .orElseThrow(() -> new UserNotFoundException("User not found."));
+
+//        PasswordResetCodes passwordResetCodes = passwordResetCodesRepository.findByUserAndCodeAndIsUsedFalseAndExpiresAtAfter(user, request.code(), LocalDateTime.now())
+//                .orElseThrow(() -> new InvalidResetCodeException("Invalid reset code."));
+
+        boolean activeResetCode = passwordResetCodesRepository.activeResetCode(user, request.code(), LocalDateTime.now());
+
+        if(!activeResetCode){
+            throw new InvalidResetCodeException("Invalid reset code.");
+        }
+
+        return VerifyResetCodeResponse.builder()
+                .verify(true)
+                .build();
     }
 }

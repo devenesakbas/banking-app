@@ -1,0 +1,7 @@
+Banka Uygulaması Yapılacaklar Listesi
+
+[+] Redis Cloud ücretsiz hesap oluşturularak kullanıcı token' ları burada tutulmalı
+[+] Global Exception yapılmalı exception tanımlamaları common içine aktarılmalıhepsini 
+[ ] Redis
+[ ] Email gönderimi
+[ ] Docker contaşnerları oluşturmak

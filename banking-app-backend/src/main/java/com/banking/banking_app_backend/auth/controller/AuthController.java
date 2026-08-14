@@ -1,9 +1,6 @@
 package com.banking.banking_app_backend.auth.controller;
 
-import com.banking.banking_app_backend.auth.dto.request.ForgotPasswordRequest;
-import com.banking.banking_app_backend.auth.dto.request.LoginRequest;
-import com.banking.banking_app_backend.auth.dto.request.RefreshRequest;
-import com.banking.banking_app_backend.auth.dto.request.RegisterRequest;
+import com.banking.banking_app_backend.auth.dto.request.*;
 import com.banking.banking_app_backend.auth.dto.response.*;
 import com.banking.banking_app_backend.auth.service.AuthService;
 import com.banking.banking_app_backend.common.response.ApiResponse;
@@ -61,6 +58,15 @@ public class AuthController {
         ForgotPasswordResponse result = authService.forgotPassword(request);
         return ResponseEntity.ok(
                 ApiResponse.success(result, "Forgot password successful")
+        );
+    }
+
+    @PostMapping("/verify-reset-code")
+    public ResponseEntity<ApiResponse<VerifyResetCodeResponse>> verifyResetCode(@RequestBody @Valid VerifyResetCodeRequest request){
+        VerifyResetCodeResponse result = authService.verifyResetCode(request);
+
+        return ResponseEntity.ok(
+                ApiResponse.success(result, "Code verified successfully")
         );
     }
 

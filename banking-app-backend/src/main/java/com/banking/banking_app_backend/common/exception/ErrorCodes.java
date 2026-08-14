@@ -15,5 +15,7 @@ public final class ErrorCodes {
     public static final String BAD_REQUEST = "BAD_REQUEST";
     public static final String INTERNAL_SERVER_ERROR = "INTERNAL_SERVER_ERROR";
     public static final String VALIDATION_ERROR = "VALIDATION_ERROR";
+    public static final String INVALID_RESET_CODE = "INVALID_RESET_CODE";
+    public static final String EMAIL_SEND_ERROR = "EMAIL_SEND_ERROR";
 
 }

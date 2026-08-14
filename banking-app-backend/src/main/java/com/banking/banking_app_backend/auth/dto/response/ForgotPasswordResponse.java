@@ -5,7 +5,7 @@ import lombok.Builder;
 @Builder
 public record ForgotPasswordResponse(
 
-        String code
+        boolean send
 
 ) {
 }

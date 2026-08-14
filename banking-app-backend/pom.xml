@@ -19,6 +19,7 @@
 
 	<properties>
 		<java.version>17</java.version>
+		<lombok.version>1.18.42</lombok.version>
 		<mapstruct.version>1.6.3</mapstruct.version>
 		<jjwt.version>0.12.6</jjwt.version>
 		<springdoc.version>2.8.5</springdoc.version>
@@ -57,6 +58,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
+			<version>${lombok.version}</version>
 			<optional>true</optional>
 		</dependency>
 
@@ -109,6 +111,11 @@
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>${springdoc.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
 	</dependencies>
 
