@@ -39,3 +39,30 @@ export interface MeResponse {
   email: string;
   role: string;
 }
+
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
+export interface ForgotPasswordResponse {
+  send: boolean;
+}
+
+export interface verifyResetCodeRequest {
+  email: string;
+  code: string;
+}
+
+export interface verifyResetCodeResponse {
+  valid: boolean;
+}
+
+export interface resetPasswordRequest {
+  email: string,
+  password: string 
+  passwordConfirm: string
+}
+
+export interface resetPasswordResponse {
+  reset: boolean;
+}

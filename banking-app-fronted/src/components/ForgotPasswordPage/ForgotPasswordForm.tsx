@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
-import logo from "../assets/logo.png";
+import { useState } from "react";
+import logo from "../../assets/logo.png";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineErrorOutline, MdOutlineCheckCircle } from "react-icons/md";
 import ForgotPasswordVerificationCodeForm from "./ForgotPasswordVerificationCodeForm";
+import { authService } from "../../services/authServices/authService";
+import { getLocalizedErrorMessage } from "../../utils/errorHandler";
 
 function ForgotPasswordForm() {
   const [email, setEmail] = useState<string>("");
@@ -16,7 +18,7 @@ function ForgotPasswordForm() {
 
   const navigate = useNavigate();
 
-  const handleForgotPassword = () => {
+  const handleForgotPassword = async () => {
     if (!email) {
       setResponse({
         type: "error",
@@ -27,16 +29,28 @@ function ForgotPasswordForm() {
 
     setIsLoading(true);
 
-    setTimeout(() => {
-      setIsLoading(false);
+    try {
+      const response = await authService.forgotPassword({ email });
+      if (response.data.success) {
+        setResponse({
+          type: "success",
+          message:
+            "Doğrulama kodu e-posta adresinize gönderildi.",
+        });
+        setShowVerificationCodeForm(true);
+      }
+    } catch (error: any) {
+      const errorResponse = error.response?.data;
+      const localizedMessage = getLocalizedErrorMessage(errorResponse);
       setResponse({
-        type: "success",
-        message:
-          "Doğrulama kodu e-posta adresinize gönderildi.",
+        type: "error",
+        message: localizedMessage,
       });
+    } 
+    finally{
+      setIsLoading(false);
+    }
 
-      setShowVerificationCodeForm(true);
-    }, 2000);
   };
 
   const handleRouteLogin = () => {
@@ -88,7 +102,7 @@ function ForgotPasswordForm() {
 
               <div className="w-full">
                 <div className="text-sm text-slate-600 font-bold mb-1">
-                  E-Posta Adresi
+                  E-Posta
                 </div>
                 <div className="relative flex items-center rounded-xl">
                   <input

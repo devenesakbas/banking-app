@@ -16,6 +16,6 @@ public record ResetPasswordRequest(
         String password,
 
         @NotBlank(message = ValidationMessages.NOT_BLANK)
-        String passwordReply
+        String passwordConfirm
 ) {
 }

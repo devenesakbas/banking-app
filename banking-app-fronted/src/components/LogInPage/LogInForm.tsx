@@ -1,12 +1,11 @@
-import logo from "../assets/logo.png";
+import logo from "../../assets/logo.png";
 import { useState } from "react";
 import { IoEye, IoEyeOff, IoLockClosed, IoMail } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
-import type { LoginRequest, LoginResponse } from "../types/auth";
-import type { ApiResponse } from "../types/ApiResponse";
-import { authService } from "../services/authServices/authService";
+import type { LoginRequest } from "../../types/auth";
+import { authService } from "../../services/authServices/authService";
 import { MdOutlineCheckCircle, MdOutlineErrorOutline } from "react-icons/md";
-import { getLocalizedErrorMessage } from "../utils/errorHandler";
+import { getLocalizedErrorMessage } from "../../utils/errorHandler";
 
 function LogInForm() {
   const navigate = useNavigate();
@@ -46,7 +45,7 @@ function LogInForm() {
 
       await authService
         .login(data)
-        .then((response) => {
+        .then((response: any) => {
           if (response.data.success) {
             setIsLoading(false);
             setEmail("");
@@ -62,7 +61,7 @@ function LogInForm() {
             setMessage({ type: "error", text: errorMessage });
           }
         })
-        .catch((error) => {
+        .catch((error: any) => {
           const errorResponse = error.response?.data;
           const localizedMessage = getLocalizedErrorMessage(errorResponse);
           setMessage({ text: localizedMessage, type: "error" });
@@ -70,7 +69,7 @@ function LogInForm() {
         .finally(() => {
           setIsLoading(false);
         });
-    } catch (error) {
+    } catch (error: any) {
       setMessage({
         type: "error",
         text: "İşlem gerçekleştirilirken sorun ile karşılaşıldı. Lütfen daha sonra tekrar deneyiniz.",

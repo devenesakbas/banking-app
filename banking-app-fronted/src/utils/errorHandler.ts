@@ -19,7 +19,10 @@ export const getLocalizedErrorMessage = (errorResponse?: ApiResponse<any>): stri
         "PRECONDITION_FAILED": "Önkoşul başarısız.",
         "SERVICE_UNAVAILABLE": "Hizmet kullanılamıyor.",
         "GATEWAY_TIMEOUT": "Geçit zaman aşımı.",
-        "UNKNOWN_ERROR": "Bilinmeyen hata."
+        "UNKNOWN_ERROR": "Bilinmeyen hata.",
+        "PASSWORD_MISMATCH": "Şifreler uyuşmuyor.",
+        "USER_NOT_FOUND": "Sistemimizde böyle bir kullanıcıyı bulamadık.",
+        "INVALID_RESET_CODE": "Geçersiz sıfırlama kodu."
     };
 
     if (errorResponse?.errorCode && errorMessages[errorResponse.errorCode]) {

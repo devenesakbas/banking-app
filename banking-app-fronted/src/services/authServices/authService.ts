@@ -7,6 +7,12 @@ import type {
   RefreshTokenRequest,
   RefreshTokenResponse,
   MeResponse,
+  ForgotPasswordRequest,
+  ForgotPasswordResponse,
+  verifyResetCodeRequest,
+  verifyResetCodeResponse,
+  resetPasswordRequest,
+  resetPasswordResponse,
 } from "../../types/auth";
 import type { ApiResponse } from "../../types/ApiResponse";
 
@@ -45,4 +51,31 @@ export const authService = {
 
     return response;
   },
+
+  forgotPassword: async (data: ForgotPasswordRequest): Promise<ApiResponse<ForgotPasswordResponse>> => {
+    const response: ApiResponse<ForgotPasswordResponse> = await api.post(
+      "/auth/forgot-password",
+      data
+    );
+
+    return response;
+  },
+
+  verifyResetCode: async (data: verifyResetCodeRequest): Promise<ApiResponse<verifyResetCodeResponse>> => {
+    const response: ApiResponse<verifyResetCodeResponse> = await api.post(
+      "/auth/verify-reset-code",
+      data
+    );
+
+    return response;
+  },
+
+  resetPassword: async (data: resetPasswordRequest): Promise<ApiResponse<resetPasswordResponse>> => {
+    const response: ApiResponse<resetPasswordResponse> = await api.post(
+      "/auth/reset-password",
+      data
+    );
+
+    return response;
+  }
 };

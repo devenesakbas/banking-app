@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -130,6 +131,14 @@ public class AuthServiceImpl implements AuthService {
                 .isUsed(false)
                 .build();
 
+        List<PasswordResetCodes> oldCodes = passwordResetCodesRepository.findByUserAndIsUsedFalse(user);
+
+        for(PasswordResetCodes oldCode : oldCodes){
+            oldCode.setIsUsed(true);
+        }
+
+        passwordResetCodesRepository.saveAll(oldCodes);
+
         PasswordResetCodes resetCode = passwordResetCodesRepository.save(passwordResetCodes);
 
         ResetCodeRequest requestSendEmail = ResetCodeRequest.builder()
@@ -167,14 +176,16 @@ public class AuthServiceImpl implements AuthService {
         User user = userRepository.findByEmail(request.email())
                 .orElseThrow(() -> new UserNotFoundException("User not found."));
 
-//        PasswordResetCodes passwordResetCodes = passwordResetCodesRepository.findByUserAndCodeAndIsUsedFalseAndExpiresAtAfter(user, request.code(), LocalDateTime.now())
-//                .orElseThrow(() -> new InvalidResetCodeException("Invalid reset code."));
+        PasswordResetCodes activeResetCodeEntity = passwordResetCodesRepository
+                .findTopByUserAndIsUsedFalseAndExpiresAtAfterOrderByExpiresAtDesc(user, LocalDateTime.now())
+                .orElseThrow(() -> new InvalidResetCodeException("Invalid or expired reset code."));
 
-        boolean activeResetCode = passwordResetCodesRepository.activeResetCode(user, request.code(), LocalDateTime.now());
-
-        if(!activeResetCode){
+        if(!activeResetCodeEntity.getCode().equals(request.code())){
             throw new InvalidResetCodeException("Invalid reset code.");
         }
+
+        activeResetCodeEntity.setIsUsed(true);
+        passwordResetCodesRepository.save(activeResetCodeEntity);
 
         return VerifyResetCodeResponse.builder()
                 .verify(true)
@@ -184,7 +195,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public ResetPasswordResponse resetPassword(ResetPasswordRequest request){
 
-        if(!request.password().equals(request.passwordReply())){
+        if(!request.password().equals(request.passwordConfirm())){
             throw new PasswordMismatchException("Password does not match.");
         }
 

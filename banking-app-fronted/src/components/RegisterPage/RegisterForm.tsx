@@ -1,11 +1,10 @@
 import { useState } from "react";
-import logo from "../assets/logo.png";
+import logo from "../../assets/logo.png";
 import { MdOutlineErrorOutline, MdOutlineCheckCircle } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
-import type { RegisterRequest, RegisterResponse } from "../types/auth";
-import { authService } from "../services/authServices/authService";
-import type { ApiResponse } from "../types/ApiResponse";
-import { getLocalizedErrorMessage } from "../utils/errorHandler";
+import type { RegisterRequest } from "../../types/auth";
+import { authService } from "../../services/authServices/authService";
+import { getLocalizedErrorMessage } from "../../utils/errorHandler";
 
 function RegisterForm() {
   const [name, setname] = useState<string>("");

@@ -1,5 +1,5 @@
 import loginSvg from "../assets/login.svg";
-import LogInForm from "../components/LogInForm";
+import LogInForm from "../components/LogInPage/LogInForm";
 
 function LogInPage() {
   return (

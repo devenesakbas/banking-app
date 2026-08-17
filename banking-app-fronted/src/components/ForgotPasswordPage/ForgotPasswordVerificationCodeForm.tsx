@@ -1,5 +1,10 @@
 import { useRef, useState, useEffect } from "react";
-
+import { RiTimerLine } from "react-icons/ri";
+import { authService } from "../../services/authServices/authService";
+import type { verifyResetCodeResponse } from "../../types/auth";
+import { getLocalizedErrorMessage } from "../../utils/errorHandler";
+import { useNavigate } from "react-router-dom";
+import { MdOutlineCheckCircle, MdOutlineErrorOutline } from "react-icons/md";
 
 interface ForgotPasswordVerificationCodeFormProps {
   setShowVerificationCodeForm: (show: boolean) => void;
@@ -12,7 +17,14 @@ export default function ForgotPasswordVerificationCodeForm({
 }: ForgotPasswordVerificationCodeFormProps) {
   const [code, setCode] = useState<string[]>(["", "", "", "", "", ""]);
   const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
-  const [verificationCodeExpiresAt, setVerificationCodeExpiresAt] = useState<number>(300);
+  const [verificationCodeExpiresAt, setVerificationCodeExpiresAt] =
+    useState<number>(300);
+  const [response, setResponse] = useState<{
+    type: "success" | "error";
+    message: string;
+  } | null>(null);
+
+  const navigate = useNavigate();
 
   const handleChange = (value: string, index: number) => {
     // Sadece rakam kabul et
@@ -73,31 +85,48 @@ export default function ForgotPasswordVerificationCodeForm({
     return `${visiblePart}${maskedPart}@${domain}`;
   };
 
-  const handleSubmit = () => {
-    const verificationCode = code.join("");
+  const handleSubmit = async () => {
+    const verifyCode = code.join("");
 
-    console.log("Verification code:", verificationCode);
+    try {
+      const response = await authService.verifyResetCode({
+        email,
+        code: verifyCode,
+      });
+
+      if (response.data.success) {
+        navigate("/reset-password", { state: { email } });
+      }
+    } catch (error) {
+      console.log(error.response.data.errorCode);
+      const errorCode = error.response.data;
+      const localizedMessage = getLocalizedErrorMessage(errorCode);
+      setResponse({
+        type: "error",
+        message: localizedMessage,
+      });
+    }
   };
 
   useEffect(() => {
-  const interval = setInterval(() => {
-    setVerificationCodeExpiresAt((prev) => {
-      if (prev <= 1) {
-        clearInterval(interval);
-        return 0;
-      }
+    const interval = setInterval(() => {
+      setVerificationCodeExpiresAt((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          return 0;
+        }
 
-      return prev - 1;
-    });
-  }, 1000);
+        return prev - 1;
+      });
+    }, 1000);
 
-  return () => clearInterval(interval);
-}, []);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="flex items-center justify-center px-4">
       <div className="w-full max-w-md rounded-2xl bg-white p-4">
-        <div className="text-center">
+        <div className="text-center mb-3">
           <h1 className="text-2xl font-bold text-gray-900">Doğrulama Kodu</h1>
 
           <p className="mt-2 text-sm text-gray-500">
@@ -105,12 +134,32 @@ export default function ForgotPasswordVerificationCodeForm({
             girin.
           </p>
         </div>
-
+        {response && (
+          <div className={`w-full transition-all duration-300`}>
+            <div
+              className={`p-3 rounded-xl text-sm font-medium border flex items-center gap-2 ${
+                response.type === "success"
+                  ? "bg-emerald-50 border-emerald-200 text-emerald-700"
+                  : "bg-rose-50 border-rose-200 text-rose-700"
+              }`}
+            >
+              {response.type === "success" ? (
+                <MdOutlineCheckCircle />
+              ) : (
+                <MdOutlineErrorOutline />
+              )}
+              {response.message}
+            </div>
+          </div>
+        )}
+        
         <div className="mt-8 flex justify-center gap-2">
           {code.map((digit, index) => (
             <input
               key={index}
-              ref={(el) => {inputsRef.current[index] = el}}
+              ref={(el) => {
+                inputsRef.current[index] = el;
+              }}
               type="text"
               inputMode="numeric"
               maxLength={1}
@@ -122,11 +171,12 @@ export default function ForgotPasswordVerificationCodeForm({
             />
           ))}
         </div>
-
         <div className="flex flex-row gap-2">
           <button
             onClick={handleSubmit}
-            disabled={code.join("").length !== 6 || verificationCodeExpiresAt <= 0}
+            disabled={
+              code.join("").length !== 6 || verificationCodeExpiresAt <= 0
+            }
             className="mt-8 w-full rounded-xl bg-blue-600 py-3 font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-300 cursor-pointer"
           >
             Doğrula
@@ -141,20 +191,17 @@ export default function ForgotPasswordVerificationCodeForm({
             Vazgeç
           </button>
         </div>
-
-        {/* <div className="mt-5 text-center text-sm text-gray-500">
-          Kod gelmedi mi?{" "}
-          <button className="font-medium text-blue-600 hover:text-blue-700">
-            Tekrar gönder
-          </button>
-        </div> */}
-
         <hr className="my-4 border-gray-300" />
-        <div className="text-center text-sm text-gray-500">
-          Kodun geçerlilik süresi:{" "}
-          {verificationCodeExpiresAt <= 0
-            ? "Süresi doldu"
-            : `${verificationCodeExpiresAt} saniye`}
+        <div className="text-center text-sm text-gray-500 flex items-center justify-center gap-2">
+          <RiTimerLine className="text-3xl text-slate-400" />{" "}
+          {" Kodun geçerlilik süresi: "}
+          <div
+            className={`font-bold ${verificationCodeExpiresAt <= 0 ? "text-red-500" : ""}`}
+          >
+            {verificationCodeExpiresAt <= 0
+              ? "Süresi doldu"
+              : `${verificationCodeExpiresAt} saniye`}
+          </div>
         </div>
       </div>
     </div>
