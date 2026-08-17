@@ -70,4 +70,12 @@ public class AuthController {
         );
     }
 
+    @PostMapping("/reset-password")
+    public ResponseEntity<ApiResponse<ResetPasswordResponse>>  resetPassword(@RequestBody @Valid ResetPasswordRequest request){
+        ResetPasswordResponse result = authService.resetPassword(request);
+        return ResponseEntity.ok(
+                ApiResponse.success(result, "Password reset successful")
+        );
+    }
+
 }

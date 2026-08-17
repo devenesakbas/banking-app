@@ -19,4 +19,7 @@ public interface AuthService {
     ForgotPasswordResponse forgotPassword(ForgotPasswordRequest forgotPasswordRequest);
 
     VerifyResetCodeResponse verifyResetCode(VerifyResetCodeRequest request);
+
+    ResetPasswordResponse resetPassword(ResetPasswordRequest request);
+
 }

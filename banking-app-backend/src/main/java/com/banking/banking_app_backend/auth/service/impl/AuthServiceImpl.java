@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -179,4 +180,26 @@ public class AuthServiceImpl implements AuthService {
                 .verify(true)
                 .build();
     }
+
+    @Override
+    public ResetPasswordResponse resetPassword(ResetPasswordRequest request){
+
+        if(!request.password().equals(request.passwordReply())){
+            throw new PasswordMismatchException("Password does not match.");
+        }
+
+        User user = userRepository.findByEmail(request.email())
+                .orElseThrow(() -> new UserNotFoundException("User not found."));
+
+        String encodedPassword = passwordEncoder.encode(request.password());
+
+        user.setPassword(encodedPassword);
+        userRepository.save(user);
+
+        return ResetPasswordResponse.builder()
+                .reset(true)
+                .build();
+
+    }
+
 }
