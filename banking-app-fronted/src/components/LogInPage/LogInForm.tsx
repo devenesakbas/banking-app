@@ -46,7 +46,7 @@ function LogInForm() {
       await authService
         .login(data)
         .then((response: any) => {
-          if (response.data.success) {
+          if (response.success) {
             setIsLoading(false);
             setEmail("");
             setPassword("");
@@ -56,7 +56,7 @@ function LogInForm() {
             navigate("/dashboard");
           } else {
             const errorMessage = getLocalizedErrorMessage(
-              response.data?.errorCode,
+              response.errorCode,
             );
             setMessage({ type: "error", text: errorMessage });
           }
@@ -166,7 +166,7 @@ function LogInForm() {
 
       <div>
         <button
-          className="w-full cursor-pointer py-3 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold rounded-2xl shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300 transform"
+          className="w-full cursor-pointer py-3 bg-linear-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold rounded-2xl shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300 transform"
           // className="w-full p-2 bg-blue-400 hover:bg-blue-500 hover:cursor-pointer rounded-xl text-white duration-300"
           disabled={isLoading}
           onClick={handleLogin}

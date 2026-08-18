@@ -1,7 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { RiTimerLine } from "react-icons/ri";
 import { authService } from "../../services/authServices/authService";
-import type { verifyResetCodeResponse } from "../../types/auth";
 import { getLocalizedErrorMessage } from "../../utils/errorHandler";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineCheckCircle, MdOutlineErrorOutline } from "react-icons/md";
@@ -94,11 +93,10 @@ export default function ForgotPasswordVerificationCodeForm({
         code: verifyCode,
       });
 
-      if (response.data.success) {
+      if (response.success) {
         navigate("/reset-password", { state: { email } });
       }
-    } catch (error) {
-      console.log(error.response.data.errorCode);
+    } catch (error: any) {
       const errorCode = error.response.data;
       const localizedMessage = getLocalizedErrorMessage(errorCode);
       setResponse({

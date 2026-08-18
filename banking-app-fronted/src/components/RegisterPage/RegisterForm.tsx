@@ -45,9 +45,7 @@ function RegisterForm() {
       await authService
         .register(form)
         .then((response) => {
-          console.log("Sonuç aşagıda:");
-          console.log(response);
-          if (response.data?.success) {
+          if (response.success) {
             setname("");
             setsurname("");
             setEmail("");
@@ -64,7 +62,7 @@ function RegisterForm() {
             }, 2000);
           } else {
             const errorMessage = getLocalizedErrorMessage(
-              response?.data,
+              response,
             );
             setMessage({ text: errorMessage, type: "error" });
           }

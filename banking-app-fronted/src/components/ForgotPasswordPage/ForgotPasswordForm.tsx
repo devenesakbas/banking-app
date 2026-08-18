@@ -31,7 +31,7 @@ function ForgotPasswordForm() {
 
     try {
       const response = await authService.forgotPassword({ email });
-      if (response.data.success) {
+      if (response.success) {
         setResponse({
           type: "success",
           message:
@@ -117,7 +117,7 @@ function ForgotPasswordForm() {
 
               <div className="w-full">
                 <button
-                  className="w-full cursor-pointer py-2 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold rounded-2xl shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300 transform"
+                  className="w-full cursor-pointer py-2 bg-linear-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold rounded-2xl shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300 transform"
                   onClick={handleForgotPassword}
                   disabled={isLoading}
                 >

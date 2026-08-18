@@ -22,7 +22,6 @@ function ResetPasswordForm({ email }: ResetPasswordFormProps) {
   const navigate = useNavigate();
 
   const handleResetPassword = async () => {
-    console.log("password:" + password + " - passwordConfirm:" + passwordConfirm)
     if (!password || !passwordConfirm) {
       setResponse({
         type: "error",
@@ -46,7 +45,7 @@ function ResetPasswordForm({ email }: ResetPasswordFormProps) {
         passwordConfirm,
       });
 
-      if (result.data.success) {
+      if (result.success) {
         setResponse({
           type: "success",
           message: "Şifreniz başarıyla degişti. Yeni şifrenizle sisteme giriş yapabilirsiniz.",
@@ -56,8 +55,8 @@ function ResetPasswordForm({ email }: ResetPasswordFormProps) {
         setPasswordConfirm("");
 
       }
-    } catch (error) {
-      const errorCode = error.data.errorCode;
+    } catch (error: any) {
+      const errorCode = error.errorCode;
       const localizedMessage = getLocalizedErrorMessage(errorCode);
       setResponse({
         type: error.data.success,
@@ -134,7 +133,7 @@ function ResetPasswordForm({ email }: ResetPasswordFormProps) {
 
           <div className="w-full flex flex-row items-center justify-center gap-2">
             <button
-              className="w-full cursor-pointer py-2 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold rounded-2xl shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300 transform"
+              className="w-full cursor-pointer py-2 bg-linear-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold rounded-2xl shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300 transform"
               onClick={handleResetPassword}
             >
               Kaydet
@@ -155,7 +154,7 @@ function ResetPasswordForm({ email }: ResetPasswordFormProps) {
             Giriş yapmak mı istiyorsunuz?{" "}
             <a
               onClick={handleRouteLogIn}
-              className="text-blue-500 text-sm hover: text-blue-600 cursor-pointer"
+              className="text-blue-500 text-sm hover:text-blue-600 cursor-pointer"
             >
               Giriş Yap
             </a>
