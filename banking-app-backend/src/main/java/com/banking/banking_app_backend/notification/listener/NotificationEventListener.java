@@ -1,6 +1,6 @@
 package com.banking.banking_app_backend.notification.listener;
 
-import com.banking.banking_app_backend.common.event.PasswordResetRequestEvent;
+import com.banking.banking_app_backend.common.event.PasswordResetSendMailEvent;
 import com.banking.banking_app_backend.notification.dto.request.ResetCodeRequest;
 import com.banking.banking_app_backend.notification.service.EmailService;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ public class NotificationEventListener {
 
     @Async
     @EventListener
-    public void handlePasswordResetRequest(PasswordResetRequestEvent event){
+    public void handlePasswordResetRequest(PasswordResetSendMailEvent event){
 
         ResetCodeRequest requestSendMail = ResetCodeRequest.builder()
                 .to(event.getEmail())

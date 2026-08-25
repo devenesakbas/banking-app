@@ -8,7 +8,7 @@ import com.banking.banking_app_backend.auth.mapper.AuthMapper;
 import com.banking.banking_app_backend.auth.repository.PasswordResetCodesRepository;
 import com.banking.banking_app_backend.auth.security.JwtService;
 import com.banking.banking_app_backend.auth.service.AuthService;
-import com.banking.banking_app_backend.common.event.PasswordResetRequestEvent;
+import com.banking.banking_app_backend.common.event.PasswordResetSendMailEvent;
 import com.banking.banking_app_backend.notification.service.EmailService;
 import com.banking.banking_app_backend.user.entity.User;
 import com.banking.banking_app_backend.user.entity.UserRole;
@@ -24,7 +24,6 @@ import org.springframework.stereotype.Service;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -140,7 +139,7 @@ public class AuthServiceImpl implements AuthService {
 
         passwordResetCodesRepository.save(passwordResetCodes);
 
-        PasswordResetRequestEvent event = PasswordResetRequestEvent.builder()
+        PasswordResetSendMailEvent event = PasswordResetSendMailEvent.builder()
                 .email(user.getEmail())
                 .code(code)
                 .build();

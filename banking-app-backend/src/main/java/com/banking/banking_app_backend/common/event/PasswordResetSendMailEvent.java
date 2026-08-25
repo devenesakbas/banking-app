@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Builder
 @Getter
-public class PasswordResetRequestEvent {
+public class PasswordResetSendMailEvent {
 
     private final String email;
     private final String code;

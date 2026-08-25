@@ -18,5 +18,6 @@ public final class ErrorCodes {
     public static final String INVALID_RESET_CODE = "INVALID_RESET_CODE";
     public static final String EMAIL_SEND_ERROR = "EMAIL_SEND_ERROR";
     public static final String PASSWORD_MISMATCH = "PASSWORD_MISMATCH";
+    public static final String ACCOUNT_NOT_FOUND = "ACCOUNT_NOT_FOUND";
 
 }
