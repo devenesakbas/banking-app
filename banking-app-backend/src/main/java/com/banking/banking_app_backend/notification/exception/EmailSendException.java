@@ -1,4 +1,4 @@
-package com.banking.banking_app_backend.auth.exception;
+package com.banking.banking_app_backend.notification.exception;
 
 import com.banking.banking_app_backend.common.exception.BaseException;
 import com.banking.banking_app_backend.common.exception.ErrorCodes;

@@ -9,7 +9,6 @@ import com.banking.banking_app_backend.user.mapper.UserMapper;
 import com.banking.banking_app_backend.user.repository.UserRepository;
 import com.banking.banking_app_backend.user.service.UserService;
 import jakarta.transaction.Transactional;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

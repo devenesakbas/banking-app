@@ -8,9 +8,7 @@ import com.banking.banking_app_backend.auth.mapper.AuthMapper;
 import com.banking.banking_app_backend.auth.repository.PasswordResetCodesRepository;
 import com.banking.banking_app_backend.auth.security.JwtService;
 import com.banking.banking_app_backend.auth.service.AuthService;
-import com.banking.banking_app_backend.common.response.ApiResponse;
-import com.banking.banking_app_backend.notification.dto.reponse.ResetCodeResponse;
-import com.banking.banking_app_backend.notification.dto.request.ResetCodeRequest;
+import com.banking.banking_app_backend.common.event.PasswordResetRequestEvent;
 import com.banking.banking_app_backend.notification.service.EmailService;
 import com.banking.banking_app_backend.user.entity.User;
 import com.banking.banking_app_backend.user.entity.UserRole;
@@ -19,7 +17,7 @@ import com.banking.banking_app_backend.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +36,7 @@ public class AuthServiceImpl implements AuthService {
     private final JwtService jwtService;
     private final PasswordResetCodesRepository passwordResetCodesRepository;
     private final EmailService emailService;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Value("${notification.email.reset-code.expiration}")
     private Long ResetCodeExpiration;
@@ -139,24 +138,14 @@ public class AuthServiceImpl implements AuthService {
 
         passwordResetCodesRepository.saveAll(oldCodes);
 
-        PasswordResetCodes resetCode = passwordResetCodesRepository.save(passwordResetCodes);
+        passwordResetCodesRepository.save(passwordResetCodes);
 
-        ResetCodeRequest requestSendEmail = ResetCodeRequest.builder()
-                .to(user.getEmail())
+        PasswordResetRequestEvent event = PasswordResetRequestEvent.builder()
+                .email(user.getEmail())
                 .code(code)
                 .build();
 
-        try {
-            ResetCodeResponse resetCodeResponse = emailService.sendResetCodeEmail(requestSendEmail);
-
-            if(!resetCodeResponse.send()){
-                throw new EmailSendException("Failed to send reset code.");
-            }
-        } catch (Exception e) {
-            throw new EmailSendException(e.getMessage());
-        }
-
-
+        eventPublisher.publishEvent(event);
 
         return ForgotPasswordResponse.builder()
                 .send(true)

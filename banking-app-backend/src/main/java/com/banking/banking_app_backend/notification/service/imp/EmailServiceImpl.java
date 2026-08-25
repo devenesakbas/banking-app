@@ -1,6 +1,6 @@
 package com.banking.banking_app_backend.notification.service.imp;
 
-import com.banking.banking_app_backend.auth.exception.EmailSendException;
+import com.banking.banking_app_backend.notification.exception.EmailSendException;
 import com.banking.banking_app_backend.notification.dto.reponse.ResetCodeResponse;
 import com.banking.banking_app_backend.notification.dto.request.ResetCodeRequest;
 import com.banking.banking_app_backend.notification.service.EmailService;
