@@ -20,7 +20,9 @@ public final class ErrorCodes {
     public static final String PASSWORD_MISMATCH = "PASSWORD_MISMATCH";
     public static final String ACCOUNT_NOT_FOUND = "ACCOUNT_NOT_FOUND";
     public static final String INVALID_ACCOUNT_NUMBER = "INVALID_ACCOUNT_NUMBER";
-    public static final String Unauthorized_Account_Exception = "Unauthorized_Account_Exception";
-    public static final String ILLAGAL_ACCOUNT_STATE = "ILLAGAL_ACCOUNT_STATE";
+    public static final String UNAUTHORIZED_ACCOUNT_EXCEPTION = "UNAUTHORIZED_ACCOUNT_EXCEPTION";
+    public static final String ILLEGAL_ACCOUNT_STATE = "ILLEGAL_ACCOUNT_STATE";
+    public static final String TRANSACTION_NOT_FOUND = "TRANSACTION_NOT_FOUND";
+    public static final String UNAUTHORIZED_TRANSACTION_EXCEPTION = "UNAUTHORIZED_TRANSACTION_EXCEPTION";
 
 }

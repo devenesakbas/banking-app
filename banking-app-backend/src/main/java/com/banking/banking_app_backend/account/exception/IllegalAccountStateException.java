@@ -6,6 +6,6 @@ import org.springframework.http.HttpStatus;
 
 public class IllegalAccountStateException extends BaseException {
     public IllegalAccountStateException(String message) {
-        super(message, ErrorCodes.ILLAGAL_ACCOUNT_STATE, HttpStatus.BAD_REQUEST);
+        super(message, ErrorCodes.ILLEGAL_ACCOUNT_STATE, HttpStatus.BAD_REQUEST);
     }
 }

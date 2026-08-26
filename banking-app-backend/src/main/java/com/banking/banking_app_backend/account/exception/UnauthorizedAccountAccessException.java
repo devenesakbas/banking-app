@@ -6,6 +6,6 @@ import org.springframework.http.HttpStatus;
 
 public class UnauthorizedAccountAccessException extends BaseException {
     public UnauthorizedAccountAccessException(String message) {
-        super(message, ErrorCodes.Unauthorized_Account_Exception, HttpStatus.FORBIDDEN);
+        super(message, ErrorCodes.UNAUTHORIZED_ACCOUNT_EXCEPTION, HttpStatus.FORBIDDEN);
     }
 }
