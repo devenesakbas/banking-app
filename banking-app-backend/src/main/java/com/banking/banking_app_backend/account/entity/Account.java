@@ -37,8 +37,8 @@ public class Account {
     private String accountNumber;
 
     @NotBlank(message = ValidationMessages.NOT_BLANK)
-    @Size(max = 26, min = 26)
-    @Column(name = "iban", nullable = false, unique = true, length = 26)
+    @Size(max = 24, min = 24)
+    @Column(name = "iban", nullable = false, unique = true, length = 24)
     private String iban;
 
     @NotNull( message = ValidationMessages.NOT_NULL )

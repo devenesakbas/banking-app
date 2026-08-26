@@ -19,5 +19,8 @@ public final class ErrorCodes {
     public static final String EMAIL_SEND_ERROR = "EMAIL_SEND_ERROR";
     public static final String PASSWORD_MISMATCH = "PASSWORD_MISMATCH";
     public static final String ACCOUNT_NOT_FOUND = "ACCOUNT_NOT_FOUND";
+    public static final String INVALID_ACCOUNT_NUMBER = "INVALID_ACCOUNT_NUMBER";
+    public static final String Unauthorized_Account_Exception = "Unauthorized_Account_Exception";
+    public static final String ILLAGAL_ACCOUNT_STATE = "ILLAGAL_ACCOUNT_STATE";
 
 }
