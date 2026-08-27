@@ -27,6 +27,10 @@ public class Account {
     @GeneratedValue( strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Version
+    @Column(nullable = false)
+    private Long version;
+
     @NotNull( message = ValidationMessages.NOT_NULL)
     @Column(name = "user_id", nullable = false)
     private Long userId;

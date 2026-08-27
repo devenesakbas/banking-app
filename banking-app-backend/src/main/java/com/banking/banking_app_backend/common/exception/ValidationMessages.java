@@ -9,5 +9,7 @@ public final class ValidationMessages {
     public static final String EMAIL_WELLFORMED = "Lütfen geçerli ve düzgün biçimli bir e-posta adresi giriniz.";
     public static final String PASSWORD_SIZE = "Şifreniz en az 6 karakterden oluşmalıdır.";
     public static final String RESET_CODE_LENGTH = "Reset kodunuz 6 karakterden oluşmalıdır.";
+    public static final String GREATER_THAN_ZERO = "Tutar sıfırdan büyük olmalıdır.";
+    public static final String CARD_HOLDER_NAME_SIZE = "Kart sahibi adı uzunlugu yanlış.";
 
 }

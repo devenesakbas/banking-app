@@ -66,6 +66,9 @@ public class Transaction {
     @Column(name = "reference_number", nullable = false, unique = true, length = 36)
     String referenceNumber;
 
+    @Column(name = "transfer_reference", nullable = true, length = 36)
+    String transferReference;
+
     @Column(name = "description")
     String description;
 

@@ -1,5 +1,6 @@
 package com.banking.banking_app_backend.common.exception;
 
+
 public final class ErrorCodes {
 
     private ErrorCodes() {}
@@ -24,5 +25,10 @@ public final class ErrorCodes {
     public static final String ILLEGAL_ACCOUNT_STATE = "ILLEGAL_ACCOUNT_STATE";
     public static final String TRANSACTION_NOT_FOUND = "TRANSACTION_NOT_FOUND";
     public static final String UNAUTHORIZED_TRANSACTION_EXCEPTION = "UNAUTHORIZED_TRANSACTION_EXCEPTION";
+    public static final String ILLEGAL_ARGUMENT = "ILLEGAL_ARGUMENT";
+    public static final String BALANCE_ERROR = "BALANCE_ERROR";
+    public static final String CARD_NOT_FOUND = "CARD_NOT_FOUND";
+    public static final String UNAUTHORIZED_CARD_EXCEPTION = "UNAUTHORIZED_CARD_EXCEPTION";
+    public static final String  ILLEGAL_CARD_STATE = "ILLEGAL_CARD_STATE";
 
 }

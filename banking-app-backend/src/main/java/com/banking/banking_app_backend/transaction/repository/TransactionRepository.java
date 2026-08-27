@@ -13,4 +13,8 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     List<Transaction> findAllByAccountId(Long accountId);
 
+    Boolean existsByReferenceNumber(String referenceNumber);
+
+    Boolean existsByTransferReference(String transferNumber);
+
 }

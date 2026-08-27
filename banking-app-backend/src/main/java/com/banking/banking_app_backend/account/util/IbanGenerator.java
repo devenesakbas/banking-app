@@ -1,6 +1,6 @@
 package com.banking.banking_app_backend.account.util;
 
-import com.banking.banking_app_backend.account.exception.InvalidAccounNumberException;
+import com.banking.banking_app_backend.account.exception.InvalidAccountException;
 
 import java.math.BigInteger;
 
@@ -13,7 +13,7 @@ public class IbanGenerator {
     public static String generate(String accountNumber) {
 
         if(accountNumber == null || !accountNumber.matches("\\d{15}")){
-            throw new InvalidAccounNumberException("Geçersiz hesap numarası");
+            throw new InvalidAccountException("Geçersiz hesap numarası");
         }
 
         String accountNumber16 = "0" + accountNumber;
