@@ -12,11 +12,9 @@ import lombok.Builder;
 public record AccountInsertRequest(
 
         @NotNull(message = ValidationMessages.NOT_NULL)
-        @Enumerated(EnumType.STRING)
         AccountType accountType,
 
         @NotNull(message = ValidationMessages.NOT_NULL)
-        @Enumerated(EnumType.STRING)
         AccountCurrency accountCurrency
 ) {
 }

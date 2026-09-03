@@ -1,4 +1,4 @@
-package com.banking.banking_app_backend.transaction.dto.response;
+package com.banking.banking_app_backend.payment.dto.response;
 
 import com.banking.banking_app_backend.account.entity.AccountCurrency;
 import com.banking.banking_app_backend.transaction.entity.TransactionStatus;
@@ -9,10 +9,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Builder
-public record TransactionResponse(
-        Long id,
+public record PaymentResponse(
+
         Long accountId,
-        Long cardId,
         TransactionType transactionType,
         BigDecimal amount,
         AccountCurrency currency,
@@ -20,5 +19,6 @@ public record TransactionResponse(
         String referenceNumber,
         String description,
         LocalDateTime createdAt
+
 ) {
 }

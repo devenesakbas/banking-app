@@ -33,7 +33,6 @@ public class AccountController {
         );
     }
 
-    @PreAuthorize("hasRole='ROLE_SUPER_ADMIN'")
     @PostMapping
     public ResponseEntity<ApiResponse<AccountInsertResponse>> newAccount(@RequestBody @Valid AccountInsertRequest request, @AuthenticationPrincipal User user){
 
@@ -54,7 +53,7 @@ public class AccountController {
         );
     }
 
-    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_SUPER_ADMIN')")
     @PatchMapping("/{id}/freeze")
     public ResponseEntity<ApiResponse<AccountResponse>> setAccountFreeze(@PathVariable Long id, @AuthenticationPrincipal User user){
         AccountResponse response = accountService.setAccountFreeze(id, user);
@@ -63,7 +62,7 @@ public class AccountController {
         );
     }
 
-    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_SUPER_ADMIN')")
     @PatchMapping("/{id}/unfreeze")
     public ResponseEntity<ApiResponse<AccountResponse>> setAccountUnfreeze(@PathVariable Long id, @AuthenticationPrincipal User user){
         AccountResponse response = accountService.setAccountUnfreeze(id, user);
@@ -72,7 +71,7 @@ public class AccountController {
         );
     }
 
-    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_SUPER_ADMIN')")
     @PatchMapping("/{id}/close")
     public ResponseEntity<ApiResponse<AccountResponse>> setAccountClose(@PathVariable Long id, @AuthenticationPrincipal User user){
         AccountResponse response = accountService.setAccountClosed(id, user);

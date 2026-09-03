@@ -18,7 +18,7 @@ public record AccountResponse(
         AccountCurrency accountCurrency,
         BigDecimal balance,
         AccountStatus accountStatus,
-        LocalDateTime creadetAt,
+        LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {
 }

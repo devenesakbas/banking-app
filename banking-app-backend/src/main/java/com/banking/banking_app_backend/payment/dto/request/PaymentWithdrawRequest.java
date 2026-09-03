@@ -1,4 +1,4 @@
-package com.banking.banking_app_backend.transaction.dto.request;
+package com.banking.banking_app_backend.payment.dto.request;
 
 import com.banking.banking_app_backend.account.entity.AccountCurrency;
 import com.banking.banking_app_backend.common.exception.ValidationMessages;
@@ -9,12 +9,9 @@ import lombok.Builder;
 import java.math.BigDecimal;
 
 @Builder
-public record TransactionTransferRequest(
-        @NotNull(message = ValidationMessages.NOT_NULL)
-        Long sourceAccountId,
+public record PaymentWithdrawRequest(
 
-        @NotNull(message = ValidationMessages.NOT_NULL)
-        Long destinationAccountId,
+        Long accountId,
 
         @NotNull(message = ValidationMessages.NOT_NULL)
         @DecimalMin(
@@ -24,8 +21,8 @@ public record TransactionTransferRequest(
         BigDecimal amount,
 
         @NotNull(message = ValidationMessages.NOT_NULL)
-        AccountCurrency currency,
 
+        AccountCurrency currency,
         String description
 ) {
 }

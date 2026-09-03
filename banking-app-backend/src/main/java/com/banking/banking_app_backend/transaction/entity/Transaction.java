@@ -1,5 +1,6 @@
 package com.banking.banking_app_backend.transaction.entity;
 
+import com.banking.banking_app_backend.account.entity.AccountCurrency;
 import com.banking.banking_app_backend.common.exception.ValidationMessages;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -40,6 +41,9 @@ public class Transaction {
     @Column(name = "account_id", nullable = false)
     Long accountId;
 
+    @Column(name = "card_id", nullable = true)
+    Long cardId;
+
     @Enumerated(EnumType.STRING)
     @NotNull(message = ValidationMessages.NOT_NULL)
     @Column(name = "transaction_type", nullable = false)
@@ -50,9 +54,9 @@ public class Transaction {
     BigDecimal amount;
 
     @Enumerated(EnumType.STRING)
-    @NotBlank(message = ValidationMessages.NOT_BLANK)
+    @NotNull(message = ValidationMessages.NOT_NULL)
     @Column(name = "currency", nullable = false)
-    TransactionCurrency currency;
+    AccountCurrency currency;
 
     @NotNull(message = ValidationMessages.NOT_NULL)
     @Column(name = "balance_before", nullable = false, precision = 19, scale = 4)

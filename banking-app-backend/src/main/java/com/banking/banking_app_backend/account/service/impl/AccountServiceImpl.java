@@ -13,10 +13,12 @@ import com.banking.banking_app_backend.account.repository.AccountRepository;
 import com.banking.banking_app_backend.account.service.AccountService;
 import com.banking.banking_app_backend.account.util.AccountNumberGenerator;
 import com.banking.banking_app_backend.account.util.IbanGenerator;
+import com.banking.banking_app_backend.common.event.ChangeAccountStatusEvent;
 import com.banking.banking_app_backend.user.entity.User;
 import com.banking.banking_app_backend.user.entity.UserRole;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -29,6 +31,7 @@ public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
     private final AccountMapper accountMapper;
     private final AccountNumberGenerator accountNumberGenerator;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     public List<AccountResponse> getAllAccounts(User user) {
@@ -86,16 +89,16 @@ public class AccountServiceImpl implements AccountService {
 
     @Transactional
     @Override
-    public AccountResponse setAccountFreeze(Long id, User user){
+    public AccountResponse setAccountFreeze(Long id, User user) {
 
         Account account = accountRepository.findById(id)
                 .orElseThrow(() -> new AccountNotFoundException("Account not found"));
 
-        if(user.getRole() != UserRole.ROLE_SUPER_ADMIN){
+        if (user.getRole() != UserRole.ROLE_SUPER_ADMIN) {
             throw new UnauthorizedAccountAccessException("Unauthorized access to account numbers");
         }
 
-        if(account.getAccountStatus() != AccountStatus.ACTIVE){
+        if (account.getAccountStatus() != AccountStatus.ACTIVE) {
             throw new IllegalAccountStateException("Invalid account status");
         }
 
@@ -103,22 +106,29 @@ public class AccountServiceImpl implements AccountService {
 
         Account updatedAccount = accountRepository.save(account);
 
+        ChangeAccountStatusEvent event = ChangeAccountStatusEvent.builder()
+                .accountId(updatedAccount.getId())
+                .accountStatus(updatedAccount.getAccountStatus())
+                .build();
+
+        eventPublisher.publishEvent(event);
+
         return accountMapper.accountToAccountResponse(updatedAccount);
 
     }
 
     @Transactional
     @Override
-    public AccountResponse setAccountUnfreeze(Long id, User user){
+    public AccountResponse setAccountUnfreeze(Long id, User user) {
 
         Account account = accountRepository.findById(id)
                 .orElseThrow(() -> new AccountNotFoundException("Account not found"));
 
-        if(user.getRole() != UserRole.ROLE_SUPER_ADMIN){
+        if (user.getRole() != UserRole.ROLE_SUPER_ADMIN) {
             throw new UnauthorizedAccountAccessException("Unauthorized access to account numbers");
         }
 
-        if(account.getAccountStatus() != AccountStatus.FROZEN){
+        if (account.getAccountStatus() != AccountStatus.FROZEN) {
             throw new IllegalAccountStateException("Invalid account status");
         }
 
@@ -126,28 +136,42 @@ public class AccountServiceImpl implements AccountService {
 
         Account updatedAccount = accountRepository.save(account);
 
+        ChangeAccountStatusEvent event = ChangeAccountStatusEvent.builder()
+                .accountId(updatedAccount.getId())
+                .accountStatus(updatedAccount.getAccountStatus())
+                .build();
+
+        eventPublisher.publishEvent(event);
+
         return accountMapper.accountToAccountResponse(updatedAccount);
 
     }
 
     @Transactional
     @Override
-    public AccountResponse setAccountClosed(Long id, User user){
+    public AccountResponse setAccountClosed(Long id, User user) {
 
         Account account = accountRepository.findById(id)
                 .orElseThrow(() -> new AccountNotFoundException("Account not found"));
 
-        if(user.getRole() != UserRole.ROLE_SUPER_ADMIN){
+        if (user.getRole() != UserRole.ROLE_SUPER_ADMIN) {
             throw new UnauthorizedAccountAccessException("Unauthorized access to account numbers");
         }
 
-        if(account.getAccountStatus() == AccountStatus.CLOSED){
+        if (account.getAccountStatus() == AccountStatus.CLOSED) {
             throw new IllegalAccountStateException("Invalid account status");
         }
 
         account.setAccountStatus(AccountStatus.CLOSED);
 
         Account updatedAccount = accountRepository.save(account);
+
+        ChangeAccountStatusEvent event = ChangeAccountStatusEvent.builder()
+                .accountId(updatedAccount.getId())
+                .accountStatus(updatedAccount.getAccountStatus())
+                .build();
+
+        eventPublisher.publishEvent(event);
 
         return accountMapper.accountToAccountResponse(updatedAccount);
 

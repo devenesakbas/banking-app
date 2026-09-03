@@ -6,6 +6,6 @@ import org.springframework.http.HttpStatus;
 
 public class UnauthorizedTransactionAccessException extends BaseException {
     public UnauthorizedTransactionAccessException(String message) {
-        super(message, ErrorCodes.UNAUTHORIZED_TRANSACTION_EXCEPTION, HttpStatus.FORBIDDEN);
+        super(message, ErrorCodes.UNAUTHORIZED_TRANSACTION, HttpStatus.FORBIDDEN);
     }
 }

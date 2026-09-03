@@ -1,4 +1,4 @@
-package com.banking.banking_app_backend.transaction.dto.request;
+package com.banking.banking_app_backend.payment.dto.request;
 
 import com.banking.banking_app_backend.account.entity.AccountCurrency;
 import com.banking.banking_app_backend.common.exception.ValidationMessages;
@@ -9,7 +9,8 @@ import lombok.Builder;
 import java.math.BigDecimal;
 
 @Builder
-public record TransactionWithdrawRequest(
+public record PaymentDepositRequest(
+
         @NotNull(message = ValidationMessages.NOT_NULL)
         Long accountId,
 
@@ -21,8 +22,9 @@ public record TransactionWithdrawRequest(
         BigDecimal amount,
 
         @NotNull(message = ValidationMessages.NOT_NULL)
-
         AccountCurrency currency,
+
         String description
+
 ) {
 }

@@ -1,5 +1,6 @@
 package com.banking.banking_app_backend.card.service;
 
+import com.banking.banking_app_backend.account.entity.AccountStatus;
 import com.banking.banking_app_backend.card.dto.request.CardInsertRequest;
 import com.banking.banking_app_backend.card.dto.response.CardResponse;
 
@@ -18,5 +19,9 @@ public interface CardService {
     CardResponse handleUnfreeze(Long id);
 
     CardResponse handleClose(Long id);
+
+    List<CardResponse> getCardsByAccountId(Long id);
+
+    void updateCardsByAccountStatus(Long accountId, AccountStatus status);
 
 }

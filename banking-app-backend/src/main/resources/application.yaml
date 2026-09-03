@@ -40,3 +40,11 @@ notification:
       from: "dev.enes.akbas@outlook.com"
       expiration: 3600000
       subject: "Enak Banka için geçici şifre sıfırlama kodun"
+
+card:
+  credit-card:
+    credit-limit: 100000.00
+    current-debt: 0.00
+    minimum-payment: 0.00
+    expiration-years: 5
+    payment-due-in-days: 30

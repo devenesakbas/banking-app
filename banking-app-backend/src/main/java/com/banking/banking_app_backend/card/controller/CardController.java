@@ -73,4 +73,13 @@ public class CardController {
         );
     }
 
+    @PatchMapping("/account/{id}")
+    public ResponseEntity<ApiResponse<List<CardResponse>>> getCardsByAccountId(@PathVariable Long id){
+        List<CardResponse> response = cardService.getCardsByAccountId(id);
+
+        return ResponseEntity.ok(
+                ApiResponse.success(response, "Fetch cards by account successfully")
+        );
+    }
+
 }
