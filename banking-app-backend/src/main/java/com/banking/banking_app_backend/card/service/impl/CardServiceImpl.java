@@ -120,7 +120,7 @@ public class CardServiceImpl implements CardService {
                     .creditLimit(creditLimit)
                     .currentDebt(currentDebt)
                     .minimumPayment(minimumPayment)
-                    .dueDate(LocalDate.now().plusYears(paymentDueInDays))
+                    .dueDate(LocalDate.now().plusDays(paymentDueInDays))
                     .build();
 
             savedCreditCard = creditCardRepository.save(creditCard);

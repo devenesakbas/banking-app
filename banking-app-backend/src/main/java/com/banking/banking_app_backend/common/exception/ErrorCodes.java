@@ -37,5 +37,6 @@ public final class ErrorCodes {
     public static final String CREDIT_CARD_NOT_FOUND = "CREDIT_CARD_NOT_FOUND";
     public static final String CREDIT_CARD_MINIMUM_PAYMENT = "CREDIT_CARD_MINIMUM_PAYMENT";
     public static final String SAME_ACCOUNT_TRANSFER = "SAME_ACCOUNT_TRANSFER";
+    public static final String INVALID_AMOUNT = "INVALID_AMOUNT";
 
 }

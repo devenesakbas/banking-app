@@ -16,6 +16,7 @@ import com.banking.banking_app_backend.card.repository.CreditCardRepository;
 import com.banking.banking_app_backend.payment.dto.request.*;
 import com.banking.banking_app_backend.payment.dto.response.PaymentResponse;
 import com.banking.banking_app_backend.payment.exception.CreditCardMinimumPaymentException;
+import com.banking.banking_app_backend.payment.exception.InvalidAmountException;
 import com.banking.banking_app_backend.payment.exception.SameAccountTransferException;
 import com.banking.banking_app_backend.payment.mapper.PaymentMapper;
 import com.banking.banking_app_backend.payment.service.PaymentService;
@@ -249,6 +250,7 @@ public class PaymentServiceImpl implements PaymentService {
         return paymentMapper.paymentResponseToTransaction(transaction);
     }
 
+    @Transactional
     @Override
     public PaymentResponse handleCardCharge(PaymentCardChargeRequest request) {
         User user = SecurityUtils.getCurrentUser();
@@ -281,6 +283,10 @@ public class PaymentServiceImpl implements PaymentService {
             throw new InsufficientCreditLimitException("Insufficient credit limit");
         }
 
+        if(request.amount().compareTo(BigDecimal.ZERO) <= 0){
+            throw new InvalidAmountException("Invalid amount");
+        }
+
         creditCard.setCurrentDebt(newDebt);
         creditCardRepository.save(creditCard);
 
@@ -303,6 +309,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     }
 
+    @Transactional
     @Override
     public PaymentResponse handleCreditCardDebtPayment(PaymentCreditCardDebtPaymentRequest request) {
         User user = SecurityUtils.getCurrentUser();
